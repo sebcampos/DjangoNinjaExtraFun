@@ -1,0 +1,4 @@
+.idea/
+.python_version
+__pycache__/
+*.sqlite3
