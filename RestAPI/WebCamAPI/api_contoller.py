@@ -24,20 +24,20 @@ class CameraController(ControllerBase):
 
     @route.get("/events", response=pagination.PaginatedResponseSchema[schemas.ObjectDetectionEventResponseSchema])
     @pagination.paginate(pagination.PageNumberPaginationExtra, page_size=50)
-    def list_events(self):
+    async def list_events(self):
         return self.event_model.objects.all()
 
     @route.get("/events/{str:event_uuid}", response=schemas.ObjectDetectionEventResponseSchema)
     @pagination.paginate(pagination.PageNumberPaginationExtra, page_size=50)
-    def list_events(self, event_uuid: str):
+    async def list_events(self, event_uuid: str):
         return self.event_model.objects.filter(event_uuid=event_uuid)
 
     @route.get("/track", response=schemas.TrackingObjectsResponseSchema)
-    def display_tracking_settings(self):
+    async def display_tracking_settings(self):
         return get_tracked_and_untracked_objects()
 
     @route.put("/track", response=schemas.TrackingObjectsResponseSchema)
-    def list_tracking(self, tracking_payload: schemas.TrackingObjectsUpdateRequestSchema):
+    async def list_tracking(self, tracking_payload: schemas.TrackingObjectsUpdateRequestSchema):
         tracking_settings = self.tracking_model.objects.first()
         if tracking_payload.track is not None:
             for event in tracking_payload.track:
