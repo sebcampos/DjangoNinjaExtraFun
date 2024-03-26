@@ -1,13 +1,14 @@
 import json
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import AsyncWebsocketConsumer
 
-class VideoConsumer(WebsocketConsumer):
+
+class VideoConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         print('connected')
         # connect to the video stream
         self.accept()
 
-    def disconnect(self, close_code):
+    async def disconnect(self, close_code):
         # disconnect from the video stream
         print('disconnected')
         pass
