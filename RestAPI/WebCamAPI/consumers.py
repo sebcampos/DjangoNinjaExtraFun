@@ -6,12 +6,14 @@ class VideoConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         print('connected')
         # connect to the video stream
+        await self.channel_layer.group_add("cam")
         self.accept()
 
     async def disconnect(self, close_code):
         # disconnect from the video stream
         print('disconnected')
-        pass
+
+        await self.channel_layer.group_discard("cam")
 
     async def receive(self, text_data):
         print("received text: " + text_data)
