@@ -22,5 +22,5 @@ from WebCamAPI import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', api.urls),
-    path("", views.video, name="video")
+    path("video", views.video, name="video")
 ]
