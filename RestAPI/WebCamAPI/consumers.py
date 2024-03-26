@@ -7,7 +7,7 @@ class VideoConsumer(WebsocketConsumer):
         # connect to the video stream
         self.accept()
 
-    async def disconnect(self, close_code):
+    def disconnect(self, close_code):
         # disconnect from the video stream
         print('disconnected')
         pass
