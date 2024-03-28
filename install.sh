@@ -3,6 +3,7 @@
 set_up_dependencies()
 {
 	# TODO add needrestart flag to bypass restart prompt https://askubuntu.com/questions/1367139/apt-get-upgrade-auto-restart-services
+	NEEDRESTART_MODE=a apt-get dist-upgrade --yes
 
 	# install pyenv dependencies
 	apt-get install make build-essential libssl-dev zlib1g-dev \
@@ -18,7 +19,7 @@ set_up_dependencies()
 
 add_pyenv_to_launching_user()
 {
-	echo "Setting up pyenv"
+	echo "Setting up pyenv ..."
 	cd "$HOME"
 	curl https://pyenv.run | bash
 	echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> "$HOME/.bashrc"
@@ -28,7 +29,7 @@ add_pyenv_to_launching_user()
 
 set_up_postgres()
 {
-	echo "setting up postgres"
+	echo "Setting up Postgres"
 	psql -c "CREATE DATABASE $DB_NAME;"
 	psql -c "CREATE USER $USER_NAME with PASSWORD '$PASSWORD';"
 	psql -c "GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $USER_NAME;"
@@ -39,11 +40,18 @@ set_up_postgres()
 
 set_up_rabbitmq()
 {
-	echo "setting up rabbitmq"
+	echo "Setting up rabbitmq ..."
 	rabbitmqctl add_user $USER_NAME $PASSWORD
 	rabbitmqctl set_user_tags $USER_NAME admin
 	rabbitmqctl add_vhost $VHOST
 	rabbitmqctl set_permissions -p $VHOST $USER_NAME ".*" ".*" ".*"
+}
+
+set_up_python_with_pyenv()
+{
+	 echo "Installing python and python virtual env, this may take a while ..."
+	 $HOME/.pyenv/bin/pyenv install $PYTHON_VERSION
+	 $HOME/.pyenv/bin/pyenv virtualenv $PYTHON_VIRTUALENV $PYTHON_VERSION
 }
 
 
@@ -51,6 +59,8 @@ export USER_NAME="sebash"
 export PASSWORD="unsecurepass"
 export DB_NAME="camera"
 export VHOST="camera"
+export PYTHON_VERSION="3.12.2"
+export PYTHON_VIRTUALENV="RestAPI"
 
 # install dependencies with apt
 set_up_dependencies
@@ -62,3 +72,8 @@ su $USER_NAME -c "add_pyenv_to_launching_user"
 # set up postgres
 export -f set_up_postgres
 su postgres -c "set_up_postgres"
+
+# set up python and virtualenv
+export -f set_up_python_with_pyenv
+su $USER_NAME -c "set_up_python_with_pyenv"
+
