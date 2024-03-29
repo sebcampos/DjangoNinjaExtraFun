@@ -51,7 +51,8 @@ set_up_python_with_pyenv()
 {
 	 echo "Installing python and python virtual env, this may take a while ..."
 	 $HOME/.pyenv/bin/pyenv install $PYTHON_VERSION
-	 $HOME/.pyenv/bin/pyenv virtualenv $PYTHON_VIRTUALENV $PYTHON_VERSION
+	 $HOME/.pyenv/bin/pyenv virtualenv $PYTHON_VERSION $PYTHON_VIRTUALENV
+	 $HOME/.pyenv/versions/$PYTHON_VIRTUALENV/bin/pip install -r requirements.txt
 }
 
 
