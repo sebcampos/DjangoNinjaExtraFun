@@ -8,7 +8,7 @@ set_up_dependencies()
 	# install pyenv dependencies
 	apt-get install make build-essential libssl-dev zlib1g-dev \
 	libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
-	libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev  -y 
+	libncursesw5-dev xz-utils cargo libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev  -y 
 
 	# install nginx, rabbitmq and postgres dependencies
 	apt-get install nginx  -y 
