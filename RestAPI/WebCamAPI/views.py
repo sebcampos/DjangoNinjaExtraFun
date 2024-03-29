@@ -2,6 +2,5 @@ from django.shortcuts import render
 
 
 # Create your views here.
-
-def video(request):
+def stream(request):
     return render(request, "video.html")

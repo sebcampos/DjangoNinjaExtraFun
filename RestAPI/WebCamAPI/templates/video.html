@@ -5,9 +5,14 @@
     <title>Video</title>
 </head>
 <body>
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
-    <input id="chat-message-input" type="text" size="100"><br>
-    <input id="chat-message-submit" type="button" value="Send">
+    <div>
+        <textarea id="chat-log" cols="100" rows="20"></textarea><br>
+        <input id="chat-message-input" type="text" size="100"><br>
+        <input id="chat-message-submit" type="button" value="Send">
+    </div>
+    <div>
+        <img id="video" src="" >
+    </div>
     <script>
 
         const chatSocket = new WebSocket(
@@ -17,8 +22,18 @@
             + 'live/'
         )
 
+        function getFrame()
+        {
+            chatSocket.send(JSON.stringify({
+                'type': 'frame', 'content': ""
+            }));
+        }
 
-	    chatSocket.onopen = function(e) {console.log(e);};
+
+	    chatSocket.onopen = function(e) {
+            console.log(e.data);
+            window.setInterval(getFrame, 100);
+        };
 
 	    chatSocket.onerror = function(e) {
 					console.log(e);
@@ -26,9 +41,14 @@
 
 
         chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
-            console.log("MESSAGE RECIEVED")
-            document.querySelector('#chat-log').value += (data.message + '\n');
+            if (e.type === "message") {
+                console.log(e);
+            }
+            else {
+                const uri = URL.createObjectURL(e.data);
+                document.getElementById("video").src = uri;
+            }
+            console.log(e);
         };
 
         chatSocket.onclose = function(e) {
@@ -46,7 +66,7 @@
             const messageInputDom = document.querySelector('#chat-message-input');
             const message = messageInputDom.value;
             chatSocket.send(JSON.stringify({
-                'message': message
+                'type': 'chat', 'content': message
             }));
             messageInputDom.value = '';
         };
