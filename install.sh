@@ -42,7 +42,7 @@ set_up_rabbitmq()
 {
 	echo "Setting up rabbitmq ..."
 	rabbitmqctl add_user $USER_NAME $PASSWORD
-	rabbitmqctl set_user_tags $USER_NAME admin
+	rabbitmqctl set_user_tags $USER_NAME administrator
 	rabbitmqctl add_vhost $VHOST
 	rabbitmqctl set_permissions -p $VHOST $USER_NAME ".*" ".*" ".*"
 }
@@ -73,6 +73,10 @@ su $USER_NAME -c "add_pyenv_to_launching_user"
 # set up postgres
 export -f set_up_postgres
 su postgres -c "set_up_postgres"
+
+# set up rabbitmq broker
+export -f set_up_rabbitmq
+set_up_rabbitmq
 
 # set up python and virtualenv
 export -f set_up_python_with_pyenv
