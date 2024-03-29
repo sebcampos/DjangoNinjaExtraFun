@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-+8^ugng*8gr^l%6pgx0za!)xcy@8al#4(2t63xbn41@(jl)*_-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["0.0.0.0", 'camerserver.local', 'cameraserver']
+ALLOWED_HOSTS = ["127.0.0.1", 'camerserver.local', 'cameraserver']
 
 # Application definition
 
@@ -81,7 +81,7 @@ DATABASES = {
         'NAME': 'camera',
         'USER': 'sebash',
         'PASSWORD': "unsecurepass",
-        'HOST': '127.0.0.1',
+        'HOST': 'cameraserver.local',
         'PORT': '5432',
     }
 }
@@ -90,7 +90,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_rabbitmq.core.RabbitmqChannelLayer",
         "CONFIG": {
-            "host": f"amqp://sebash:unsecurepass@127.0.0.1/camera",
+            "host": f"amqp://sebash:unsecurepass@cameraserver.local/camera",
         }
     }
 }

@@ -7,7 +7,7 @@ class VideoConsumer(AsyncWebsocketConsumer):
         print('connected')
         # connect to the video stream
         await self.channel_layer.group_add("cam", "live")
-        self.accept()
+        await self.accept()
 
     async def disconnect(self, close_code):
         # disconnect from the video stream
@@ -21,6 +21,6 @@ class VideoConsumer(AsyncWebsocketConsumer):
         message = text_data_json['message']
 
         # Broadcast the received message to all clients
-        self.send(text_data=json.dumps({
+        await self.send(text_data=json.dumps({
             'message': message
         }))
