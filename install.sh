@@ -10,6 +10,10 @@ set_up_dependencies()
 	libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
 	libncursesw5-dev xz-utils cargo libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev  -y 
 
+  # install rust
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh  # may need restart
+
+
 	# install nginx, rabbitmq and postgres dependencies
 	apt-get install nginx  -y 
 	apt-get install postgresql postgresql-contrib  -y 

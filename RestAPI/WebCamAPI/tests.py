@@ -38,13 +38,13 @@ def test_2():
     min_conf_threshold = 0.5
 
     # Load the label map
-    with open("/Users/sebash/CLionProjects/webcamera/resources/detectlabelmap.txt", 'r') as f:
+    with open("/Users/sebash/CLionProjects/Camera/resources/detectlabelmap.txt", 'r') as f:
         labels = [line.strip() for line in f.readlines()]
 
     if labels[0] == '???':
         del (labels[0])
 
-    interpreter = tf.lite.Interpreter(model_path="/Users/sebash/CLionProjects/webcamera/resources/detect.tflite")
+    interpreter = tf.lite.Interpreter(model_path="/Users/sebash/CLionProjects/Camera/resources/detect.tflite")
 
     interpreter.allocate_tensors()
 

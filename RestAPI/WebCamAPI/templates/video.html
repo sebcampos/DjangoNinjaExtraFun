@@ -1,57 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Video</title>
-</head>
-<body>
-    <div>
-        <textarea id="chat-log" cols="100" rows="20"></textarea><br>
-        <input id="chat-message-input" type="text" size="100"><br>
-        <input id="chat-message-submit" type="button" value="Send">
-    </div>
-    <div>
-        <img id="video" src="" >
+{% extends "base.html" %}
+
+{% block title %}Video Cam{% endblock %}
+
+{% block content %}
+    <div class="row" style="width: 100%; height: 100%;">
+        <div class="col-sm">
+            <img id="video" src="" style="width: 100%;">
+        </div>
+        <div class="col-sm">
+            <textarea id="chat-log"  style="width: 100%; height: 100%;"></textarea><br>
+            <input id="chat-message-input" style="width: 100%; width: 100%;" type="text" ><br>
+            <input id="chat-message-submit" type="button" value="Send"  style="width: 100%;">
+        </div>
     </div>
     <script>
 
-        const chatSocket = new WebSocket(
+        let connected = false;
+        const videoSocket = new WebSocket(
             'ws://'
             + window.location.host
             + '/ws/video/'
             + 'live/'
         )
 
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/video/'
+            + 'chat/'
+        )
+
         function getFrame()
         {
-            chatSocket.send(JSON.stringify({
+            videoSocket.send(JSON.stringify({
                 'type': 'frame', 'content': ""
             }));
         }
 
 
-	    chatSocket.onopen = function(e) {
+	    videoSocket.onopen = function(e) {
             console.log(e.data);
-            window.setInterval(getFrame, 100);
+            connected = true;
+            window.setInterval(getFrame, 1);
         };
 
-	    chatSocket.onerror = function(e) {
+        chatSocket.onopen = function(e) {
+            console.log(e.data);
+
+        };
+
+	    videoSocket.onerror = function(e) {
 					console.log(e);
 			};
 
-
-        chatSocket.onmessage = function(e) {
-            if (e.type === "message") {
+        chatSocket.onerror = function(e) {
                 console.log(e);
-            }
-            else {
-                const uri = URL.createObjectURL(e.data);
-                document.getElementById("video").src = uri;
-            }
-            console.log(e);
         };
 
-        chatSocket.onclose = function(e) {
+        videoSocket.onmessage = function(e) {
+            console.log(e.data);
+            document.getElementById("video").src = URL.createObjectURL(e.data);
+        };
+
+        chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            document.querySelector('#chat-log').value += (data.message + '\n');
+        }
+
+        videoSocket.onclose = function(e) {
             console.log('Chat socket closed unexpectedly');
         };
 
@@ -71,5 +87,5 @@
             messageInputDom.value = '';
         };
     </script>
-</body>
-</html>
+
+{% endblock %}
