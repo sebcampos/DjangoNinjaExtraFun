@@ -86,6 +86,7 @@ class VideoConsumer(AsyncWebsocketConsumer):
         # disconnect from the video stream, remove from cam group
         print("disconnect sent code to vidcam", close_code)
         self.cam_sock_connection.sendall(b"close")
+        self.cam_sock_connection.shutdown(socket.SHUT_RDWR)
         self.cam_sock_connection.close()
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
