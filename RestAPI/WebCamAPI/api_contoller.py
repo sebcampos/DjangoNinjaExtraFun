@@ -3,6 +3,7 @@ from ninja_extra import (
     api_controller, status, ControllerBase, pagination, route
 )
 from ninja_extra.controllers.response import Detail
+from asgiref.sync import sync_to_async
 from . import models, schemas, OBJECT_DETECTION_MODEL_LABELS
 
 
@@ -27,9 +28,19 @@ class CameraController(ControllerBase):
     async def list_events(self):
         return self.event_model.objects.all()
 
+    @route.post("/events/", response=schemas.ObjectDetectionEventResponseSchema)
+    async def create_events(self, event: schemas.ObjectDetectionEventCreateSchema):
+        return await sync_to_async(self.event_model.objects.create)(object_index=event.object_index)
+
+    @route.put("/events/{str:event_uuid}", response=schemas.ObjectDetectionEventResponseSchema)
+    async def update_event(self, event_uuid: str, new_event_data: schemas.ObjectDetectionEventUpdateSchema):
+        event = self.event_model.objects.filter(event_uuid=event_uuid).first()
+        # TODO update the event
+        return event
+
     @route.get("/events/{str:event_uuid}", response=schemas.ObjectDetectionEventResponseSchema)
     @pagination.paginate(pagination.PageNumberPaginationExtra, page_size=50)
-    async def list_events(self, event_uuid: str):
+    async def get_event(self, event_uuid: str):
         return self.event_model.objects.filter(event_uuid=event_uuid)
 
     @route.get("/track", response=schemas.TrackingObjectsResponseSchema)

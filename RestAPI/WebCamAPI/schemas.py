@@ -114,7 +114,22 @@ class EventLabelsEnum(str, Enum):
     empty = 'empty'
 
 
+class ObjectDetectionEventCreateSchema(ModelSchema):
+    class Config:
+        model = models.ObjectDetectionEvent
+        model_fields = ["object_index"]
+
+
+class ObjectDetectionEventUpdateSchema(ModelSchema):
+    class Meta:
+        model = models.ObjectDetectionEvent
+        exclude = ["object_index", "event_id"]
+
+
 class ObjectDetectionEventResponseSchema(ModelSchema):
+    object_name: str
+    duration: float
+
     class Config:
         model = models.ObjectDetectionEvent
         model_fields = "__all__"
@@ -128,4 +143,3 @@ class TrackingObjectsResponseSchema(Schema):
 class TrackingObjectsUpdateRequestSchema(Schema):
     track: List[EventLabelsEnum] | None = None
     untrack: List[EventLabelsEnum] | None = None
-

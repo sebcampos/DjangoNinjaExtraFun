@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from django.db import models
 from . import OBJECT_DETECTION_MODEL_LABELS
 
@@ -121,16 +121,17 @@ class ObjectDetectionEvent(models.Model):
     end_time = models.DateTimeField(null=True)
     event_occurring = models.BooleanField(default=True)
     object_index = models.IntegerField(choices=EventLabelIndexChoices.choices)
-    confidence_score_max = models.FloatField()
-    confidence_score_min = models.FloatField()
 
+    @property
     def object_name(self) -> str:
         return OBJECT_DETECTION_MODEL_LABELS[self.object_index]
 
-    def duration(self) -> int:
+    @property
+    def duration(self) -> float:
+        print(datetime.now(timezone.utc), self.start_time)
         if self.end_time is None:
-            return datetime.now() - self.start_time
-        return self.end_time - self.start_time
+            return (datetime.now(timezone.utc) - self.start_time).total_seconds()
+        return (self.end_time - self.start_time).total_seconds()
 
 
 class TrackingObjects(models.Model):

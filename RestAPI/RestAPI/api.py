@@ -15,5 +15,6 @@ class ApiKey(APIKeyHeader):
 
 header_key = ApiKey()
 
-api = NinjaExtraAPI(title="WebCamAPI", version="0.0.1", csrf=True, auth=[header_key, django_auth])
+#api = NinjaExtraAPI(title="WebCamAPI", version="0.0.1", csrf=True, auth=[header_key, django_auth])
+api = NinjaExtraAPI(title="WebCamAPI", version="0.0.1")
 api.register_controllers(CameraController)
