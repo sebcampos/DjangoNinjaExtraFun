@@ -123,7 +123,7 @@ class ObjectDetectionEventCreateSchema(ModelSchema):
 class ObjectDetectionEventUpdateSchema(ModelSchema):
     class Meta:
         model = models.ObjectDetectionEvent
-        exclude = ["object_index", "event_id"]
+        fields = ["event_occurring"]
 
 
 class ObjectDetectionEventResponseSchema(ModelSchema):

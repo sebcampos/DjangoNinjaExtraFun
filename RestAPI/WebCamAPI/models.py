@@ -118,7 +118,7 @@ class EventLabelIndexChoices(models.IntegerChoices):
 class ObjectDetectionEvent(models.Model):
     event_id = models.UUIDField(primary_key=True, default=uuid.uuid4)
     start_time = models.DateTimeField(auto_now_add=True)
-    end_time = models.DateTimeField(null=True)
+    end_time = models.DateTimeField(auto_now=True, null=True)
     event_occurring = models.BooleanField(default=True)
     object_index = models.IntegerField(choices=EventLabelIndexChoices.choices)
 
@@ -128,7 +128,6 @@ class ObjectDetectionEvent(models.Model):
 
     @property
     def duration(self) -> float:
-        print(datetime.now(timezone.utc), self.start_time)
         if self.end_time is None:
             return (datetime.now(timezone.utc) - self.start_time).total_seconds()
         return (self.end_time - self.start_time).total_seconds()
