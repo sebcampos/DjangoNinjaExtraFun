@@ -1,6 +1,8 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 import socket
+import asyncio
+from time import sleep
 
 HOST = "127.0.0.1"
 PORT = 8080
@@ -24,7 +26,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message_type = text_data_json['type']
         content = text_data_json['content']
         if message_type == "update":
-            print("update recieved")
+            print("update received")
             print("update lists")
 
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -85,9 +87,6 @@ class VideoConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         # disconnect from the video stream, remove from cam group
         print("disconnect sent code to vidcam", close_code)
-        self.cam_sock_connection.sendall(b"close")
-        self.cam_sock_connection.shutdown(socket.SHUT_RDWR)
-        self.cam_sock_connection.close()
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
     async def receive(self, text_data):
