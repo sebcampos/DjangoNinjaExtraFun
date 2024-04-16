@@ -1,0 +1,80 @@
+{% extends "nav.html" %}
+
+{% block title %}Video Cam{% endblock %}
+
+{% block page_content %}
+
+    <section class="vh-100 gradient-custom">
+    <form method="post"  class="form-signin">
+     {% csrf_token %}
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card bg-dark text-white" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center">
+
+            <div class="mb-md-5 mt-md-4 pb-5">
+                <h2 class="fw-bold mb-2 text-uppercase">Tracking List</h2>
+                  <div data-mdb-input-init class="form-outline form-white mb-4">
+                      <label class="form-label" for="max_number_of_players">Max Number of players</label>
+                        <br>
+                        <input type="range" id="max_number_of_players" name="max_number_of_players" class="form-range form-control-lg" value="1" min="1" max="30" oninput="this.nextElementSibling.nextElementSibling.value = this.value">
+                        <br>
+                        <output>1</output>
+                  </div>
+                  <div data-mdb-input-init class="form-outline form-white mb-4">
+                    <select class="form-control form-control-lg form-select" id="game_type" name="game_type" aria-label="Game Type">
+                      <option value="simple">Simple</option>
+                      <option value="trivia">Trivia</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <button data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-light btn-lg px-5" type="submit">Create Game</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+        <div >
+            <h1>Tracking</h1>
+            <ul class="list-group" id="tracking">
+            </ul>
+        </div>
+        <div>
+            <h1>Not Tracking</h1>
+            <ul class="list-group" id="notTracking">
+            </ul>
+        </div>
+    </form>
+</section>
+    <script>
+
+
+        window.addEventListener("load", (event) => {
+            fetch("/api/cam/track").then((response) => {
+                return response.json();
+            })
+                .then((data) => {
+                    trackingData = data;
+                    for (let i = 0; i < trackingData.tracked.length; i++) {
+                        var label = trackingData.tracked[i];
+                        var li = document.createElement("li");
+                        li.classList.add("list-group-item")
+                        li.textContent = label;
+                        document.getElementById("tracking").appendChild(li);
+
+                    }
+                    for (let i = 0; i < trackingData.untracked.length; i++) {
+                        var label = trackingData.untracked[i];
+                        var li = document.createElement("li");
+                        li.classList.add("list-group-item")
+                        li.textContent = label;
+                        document.getElementById("notTracking").appendChild(li);
+                    }
+                }).catch(function (error) {
+                console.log(error);
+            });
+        });
+    </script>
+{% endblock %}
