@@ -82,6 +82,7 @@ export DB_NAME="camera"
 export VHOST="camera"
 export PYTHON_VERSION="3.12.2"
 export PYTHON_VIRTUALENV="RestAPI"
+export GROUP_NAME="tnt"
 
 # install dependencies with apt
 set_up_dependencies
@@ -101,4 +102,11 @@ set_up_rabbitmq
 # set up python and virtualenv
 export -f set_up_python_with_pyenv
 su $USER_NAME -c "set_up_python_with_pyenv"
+
+
+mkdir /var/www
+groupadd $GROUP_NAME
+chgrp $GROUP_NAME /var/www
+chmod g+rwx /var/www
+usermod -a -G $GROUP_NAME $USER_NAME
 
