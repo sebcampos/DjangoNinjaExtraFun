@@ -6,12 +6,28 @@ set_up_dependencies()
 	NEEDRESTART_MODE=a apt-get dist-upgrade --yes
 
 	# install pyenv dependencies
-	apt-get install make build-essential libssl-dev zlib1g-dev \
-	libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
-	libncursesw5-dev xz-utils cargo libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev  -y 
+	apt update
+	apt install \
+	    build-essential \
+	    curl \
+	    libbz2-dev \
+	    libffi-dev \
+	    liblzma-dev \
+	    libncursesw5-dev \
+	    libreadline-dev \
+	    libsqlite3-dev \
+	    libssl-dev \
+	    libxml2-dev \
+	    libxmlsec1-dev \
+	    llvm \
+	    make \
+	    tk-dev \
+	    wget \
+	    xz-utils \
+	    zlib1g-dev
 
-  # install rust
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh  # may need restart
+	# install rust
+	# curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh  # may need restart
 
 
 	# install nginx, rabbitmq and postgres dependencies
