@@ -6,12 +6,28 @@ set_up_dependencies()
 	NEEDRESTART_MODE=a apt-get dist-upgrade --yes
 
 	# install pyenv dependencies
-	apt-get install make build-essential libssl-dev zlib1g-dev \
-	libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
-	libncursesw5-dev xz-utils cargo libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev  -y 
+	apt update
+	apt install \
+	    build-essential \
+	    curl \
+	    libbz2-dev \
+	    libffi-dev \
+	    liblzma-dev \
+	    libncursesw5-dev \
+	    libreadline-dev \
+	    libsqlite3-dev \
+	    libssl-dev \
+	    libxml2-dev \
+	    libxmlsec1-dev \
+	    llvm \
+	    make \
+	    tk-dev \
+	    wget \
+	    xz-utils \
+	    zlib1g-dev
 
-  # install rust
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh  # may need restart
+	# install rust
+	# curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh  # may need restart
 
 
 	# install nginx, rabbitmq and postgres dependencies
@@ -39,6 +55,7 @@ set_up_postgres()
 	psql -c "GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $USER_NAME;"
 	psql -c "ALTER DATABASE $DB_NAME OWNER TO $USER_NAME;"
 	psql -c "GRANT CREATE ON SCHEMA public TO $USER_NAME;"
+	psql -c "ALTER USER $USER_NAME CREATEDB;"
 
 }
 
@@ -61,11 +78,12 @@ set_up_python_with_pyenv()
 
 
 export USER_NAME="sebash"
-export PASSWORD="unsecurepass"
-export DB_NAME="camera"
-export VHOST="camera"
+export PASSWORD="Lkdfgieowg382"
+export DB_NAME="tnt"
+export VHOST="tnt"
 export PYTHON_VERSION="3.12.2"
-export PYTHON_VIRTUALENV="RestAPI"
+export PYTHON_VIRTUALENV="TNTAPI"
+export GROUP_NAME="tnt"
 
 # install dependencies with apt
 set_up_dependencies
@@ -85,4 +103,5 @@ set_up_rabbitmq
 # set up python and virtualenv
 export -f set_up_python_with_pyenv
 su $USER_NAME -c "set_up_python_with_pyenv"
+
 
