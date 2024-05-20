@@ -36,10 +36,9 @@ class CameraController(ControllerBase):
 
     @route.put("/events/{str:event_uuid}/", response=schemas.ObjectDetectionEventResponseSchema)
     async def update_event(self, event_uuid: str, new_event_data: schemas.ObjectDetectionEventUpdateSchema):
-        event = await sync_to_async(self.event_model.objects.filter)(event_id=event_uuid)
-        event = await sync_to_async(event.first)()
+        event = await self.event_model.objects.aget(event_id=event_uuid)
         event.event_occurring = new_event_data.event_occurring
-        await sync_to_async(event.save)()
+        await event.asave()
         return event
 
     @route.get("/events/{str:event_uuid}", response=schemas.ObjectDetectionEventResponseSchema)
@@ -60,5 +59,5 @@ class CameraController(ControllerBase):
         if tracking_payload.untrack is not None:
             for event in tracking_payload.track:
                 tracking_settings.__setattr__(event, False)
-        await sync_to_async(tracking_settings.save)()
+        await tracking_settings.asave()
         return await sync_to_async(get_tracked_and_untracked_objects)()
