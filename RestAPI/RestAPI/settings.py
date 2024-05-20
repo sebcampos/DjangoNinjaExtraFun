@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-+8^ugng*8gr^l%6pgx0za!)xcy@8al#4(2t63xbn41@(jl)*_-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", 'camerserver.local', 'cameraserver']
+ALLOWED_HOSTS = ["127.0.0.1", 'cameraserver.local', 'cameraserver']
 
 # Application definition
 

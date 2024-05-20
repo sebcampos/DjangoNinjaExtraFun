@@ -79,11 +79,11 @@ set_up_python_with_pyenv()
 
 export USER_NAME="sebash"
 export PASSWORD="Lkdfgieowg382"
-export DB_NAME="tnt"
-export VHOST="tnt"
+export DB_NAME="apidb"
+export VHOST="apivhost"
 export PYTHON_VERSION="3.12.2"
-export PYTHON_VIRTUALENV="TNTAPI"
-export GROUP_NAME="tnt"
+export PYTHON_VIRTUALENV="RestAPI"
+export GROUP_NAME="djangoapi"
 
 # install dependencies with apt
 set_up_dependencies
@@ -105,3 +105,8 @@ export -f set_up_python_with_pyenv
 su $USER_NAME -c "set_up_python_with_pyenv"
 
 
+mkdir /var/www
+groupadd $GROUP_NAME
+chgrp $GROUP_NAME /var/www
+chmod g+rwx /var/www
+usermod -a -G $GROUP_NAME $USER_NAME
